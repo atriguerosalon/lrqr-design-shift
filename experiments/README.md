@@ -17,6 +17,7 @@ Most scripts take 5-25 minutes on one core; independent settings can run as para
 | `check_beta_grid.py` | Is the large-lambda failure an optimisation artefact? Effect of the beta range |
 | `exp5_screening.py` | E5: top-k screening (known generator) and an optimizer push, d = 50 |
 | `exp6_ratio_tuning.py` | E6: better density-ratio estimators for weighted CP |
+| `exp7_deep_features.py` | E7: features from networks trained for the mean |
 | `out_*.txt` | Raw outputs |
 
 ## Implementation choices where the paper is unspecific
@@ -108,6 +109,18 @@ logistic on the true shift direction only (oracle, not available in practice) 0.
 The learned ratios correlate well with the true one (0.78-0.94 on log scale) but are too flat:
 their ESS is 460-820 against ~216 for the true ratio, so they under-weight the most shifted
 calibration points and under-cover. LR-QR's win in scenario O holds against tuned estimators.
+
+**E7, features from networks trained for the mean** (`exp7_deep_features.py`, E4 setting d = 10,
+delta = 1.5, scores from each network's own predictions, 5 reps, `out_E7.txt`; split 0.732).
+Ridge probe R^2 on fresh data for x1 / |x1| (|x1| drives the error size), then LR-QR coverage:
+- small (32,): probe 0.92 / 0.23; lambda = 0 0.789, CV 0.826, lambda = 0.1 0.890
+- deep (128,128,64): probe 0.76 / 0.49; lambda = 0 0.836, CV 0.872, lambda = 0.1 0.911
+- deep, weight decay 1.0: probe 0.58 / 0.08; lambda = 0 0.768, CV 0.776, lambda = 0.1 0.856
+Networks trained for the mean do not simply drop the shifted coordinate. What predicts LR-QR's
+coverage is whether the features can express the error-relevant quantity |x1| (ordering of the
+|x1| probe matches the ordering of CV coverage), not whether they contain x1. Strong weight decay
+removes |x1| and LR-QR falls back towards split CP; CV lambda does not notice.
+Possible practical check (untested): probe whether the features predict the calibration scores.
 
 ## Summary of what the experiments suggest (not yet claims)
 1. In the authors' own toy, the shift does not affect the errors (split CP is exactly valid), and

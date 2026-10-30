@@ -1,0 +1,23 @@
+== E7 features from networks trained for the mean, d=10, delta=1.5
+   split        cov 0.732 +- 0.013   width    1.916
+   _small_32_probe_x1 median 0.915
+   _small_32_probe_abs_x1 median 0.229
+   _small_32_live_units median 32
+   small_32_lam0 cov 0.789 +- 0.019   width    2.243
+   small_32_lam0.01 cov 0.841 +- 0.017   width    2.711
+   small_32_lam0.1 cov 0.890 +- 0.020   width    3.126
+   small_32_cv  cov 0.826 +- 0.033   width    2.590
+   _deep_128x128x64_probe_x1 median 0.757
+   _deep_128x128x64_probe_abs_x1 median 0.488
+   _deep_128x128x64_live_units median 63
+   deep_128x128x64_lam0 cov 0.836 +- 0.014   width    3.286
+   deep_128x128x64_lam0.01 cov 0.886 +- 0.014   width    4.086
+   deep_128x128x64_lam0.1 cov 0.911 +- 0.008   width    6.184
+   deep_128x128x64_cv cov 0.872 +- 0.025   width    3.691
+   _deep_wd_probe_x1 median 0.578
+   _deep_wd_probe_abs_x1 median 0.0759
+   _deep_wd_live_units median 48
+   deep_wd_lam0 cov 0.768 +- 0.022   width    2.053
+   deep_wd_lam0.01 cov 0.778 +- 0.033   width    2.087
+   deep_wd_lam0.1 cov 0.856 +- 0.032   width    2.832
+   deep_wd_cv   cov 0.776 +- 0.016   width    2.183
