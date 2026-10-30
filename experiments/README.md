@@ -12,6 +12,7 @@ Most scripts take 5-25 minutes on one core; independent settings can run as para
 | File | What |
 |---|---|
 | `lrqr.py` | LR-QR (beta eliminated in closed form, smoothed pinball, L-BFGS), lambda CV as described in Sec. 5.1, split CP, weighted CP, logistic density-ratio estimate, effective sample size |
+| `exp1_authors_toy.py` | E1: replication of the authors' rebuttal simulation (reply to reviewer KYG7) |
 
 ## Implementation choices where the paper is unspecific
 
@@ -33,3 +34,9 @@ random restarts find no lower objective, beta is the closed-form minimiser, and 
 baselines behave as expected. It cannot check [A1]-[A6].
 
 ## Results so far (alpha = 0.1, target coverage 0.90)
+
+**E1, authors' toy** (d = 10, homoscedastic noise, well-specified linear model, E1[r^2] = e^{4d} ~ 2e17):
+split CP 0.900 (already valid: the shift does not change the error distribution); weighted CP
+(true or estimated r) gives infinite intervals; LR-QR 0.893 / 0.893 / 0.909 / 0.993 / 0.997 for
+lambda = 1e-6 ... 1e-2 (authors report 0.864 / 0.860 / 0.867 / 0.943 / 1.000). Same pattern, not
+the exact numbers.
