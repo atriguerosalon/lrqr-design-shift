@@ -1,0 +1,85 @@
+== E8 E4_blind
+   split        cov 0.732 +- 0.021   width    1.874
+   _skill_base  median -0.0221
+   base_lam0    cov 0.733 +- 0.016   width    1.878
+   base_lam0.01 cov 0.734 +- 0.016   width    1.876
+   base_lam0.1  cov 0.734 +- 0.019   width    1.862
+   base_cv      cov 0.733 +- 0.017   width    1.878
+   _skill_+g_gbm median 0.224
+   +g_gbm_lam0  cov 0.842 +- 0.008   width    2.541
+   +g_gbm_lam0.01 cov 0.843 +- 0.009   width    2.571
+   +g_gbm_lam0.1 cov 0.849 +- 0.008   width    2.749
+   +g_gbm_cv    cov 0.842 +- 0.008   width    2.541
+   _skill_+g_mlp median 0.22
+   +g_mlp_lam0  cov 0.870 +- 0.011   width    2.711
+   +g_mlp_lam0.01 cov 0.876 +- 0.010   width    2.797
+   +g_mlp_lam0.1 cov 0.873 +- 0.008   width    3.161
+   +g_mlp_cv    cov 0.873 +- 0.012   width    2.797
+== E8 E4_affine
+   split        cov 0.732 +- 0.021   width    1.874
+   _skill_base  median -0.0158
+   base_lam0    cov 0.737 +- 0.012   width    1.898
+   base_lam0.01 cov 0.784 +- 0.013   width    2.133
+   base_lam0.1  cov 0.838 +- 0.009   width    2.387
+   base_cv      cov 0.748 +- 0.012   width    1.955
+   _skill_+g_gbm median 0.229
+   +g_gbm_lam0  cov 0.840 +- 0.018   width    2.571
+   +g_gbm_lam0.01 cov 0.890 +- 0.015   width    2.969
+   +g_gbm_lam0.1 cov 0.942 +- 0.008   width    3.968
+   +g_gbm_cv    cov 0.847 +- 0.016   width    2.639
+   _skill_+g_mlp median 0.222
+   +g_mlp_lam0  cov 0.872 +- 0.022   width    2.775
+   +g_mlp_lam0.01 cov 0.918 +- 0.012   width    3.224
+   +g_mlp_lam0.1 cov 0.933 +- 0.010   width    4.101
+   +g_mlp_cv    cov 0.893 +- 0.025   width    2.865
+== E8 E5O_affine
+   split        cov 0.710 +- 0.013   width    1.845
+   _skill_base  median -0.0907
+   base_lam0    cov 0.689 +- 0.015   width    1.830
+   base_lam0.01 cov 0.739 +- 0.012   width    1.995
+   base_lam0.1  cov 0.783 +- 0.019   width    2.296
+   base_cv      cov 0.726 +- 0.031   width    1.972
+   _skill_+g_gbm median -0.0868
+   +g_gbm_lam0  cov 0.697 +- 0.014   width    1.852
+   +g_gbm_lam0.01 cov 0.744 +- 0.012   width    2.046
+   +g_gbm_lam0.1 cov 0.787 +- 0.019   width    2.282
+   +g_gbm_cv    cov 0.724 +- 0.025   width    1.926
+   _skill_+g_mlp median -0.0798
+   +g_mlp_lam0  cov 0.702 +- 0.016   width    1.892
+   +g_mlp_lam0.01 cov 0.763 +- 0.016   width    2.131
+   +g_mlp_lam0.1 cov 0.799 +- 0.016   width    2.501
+   +g_mlp_cv    cov 0.737 +- 0.049   width    1.997
+== E8 E5O_rich
+   split        cov 0.710 +- 0.013   width    1.845
+   _skill_base  median 0.301
+   base_lam0    cov 0.874 +- 0.010   width    2.898
+   base_lam0.01 cov 0.927 +- 0.006   width    3.569
+   base_lam0.1  cov 0.906 +- 0.009   width    5.524
+   base_cv      cov 0.904 +- 0.026   width    3.420
+   _skill_+g_gbm median 0.299
+   +g_gbm_lam0  cov 0.874 +- 0.010   width    2.886
+   +g_gbm_lam0.01 cov 0.927 +- 0.005   width    3.568
+   +g_gbm_lam0.1 cov 0.905 +- 0.011   width    5.493
+   +g_gbm_cv    cov 0.907 +- 0.014   width    3.195
+   _skill_+g_mlp median 0.298
+   +g_mlp_lam0  cov 0.873 +- 0.010   width    2.863
+   +g_mlp_lam0.01 cov 0.927 +- 0.006   width    3.597
+   +g_mlp_lam0.1 cov 0.906 +- 0.009   width    5.555
+   +g_mlp_cv    cov 0.908 +- 0.014   width    3.174
+== E8 E7_deepwd
+   split        cov 0.736 +- 0.018   width    1.930
+   _skill_base  median 0.0237
+   base_lam0    cov 0.768 +- 0.023   width    2.052
+   base_lam0.01 cov 0.776 +- 0.027   width    2.054
+   base_lam0.1  cov 0.855 +- 0.033   width    2.719
+   base_cv      cov 0.797 +- 0.053   width    2.153
+   _skill_+g_gbm median 0.244
+   +g_gbm_lam0  cov 0.843 +- 0.016   width    2.540
+   +g_gbm_lam0.01 cov 0.854 +- 0.011   width    2.637
+   +g_gbm_lam0.1 cov 0.902 +- 0.024   width    3.700
+   +g_gbm_cv    cov 0.855 +- 0.033   width    2.575
+   _skill_+g_mlp median 0.228
+   +g_mlp_lam0  cov 0.865 +- 0.015   width    2.708
+   +g_mlp_lam0.01 cov 0.881 +- 0.011   width    2.871
+   +g_mlp_lam0.1 cov 0.903 +- 0.023   width    3.822
+   +g_mlp_cv    cov 0.871 +- 0.019   width    2.751

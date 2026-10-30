@@ -18,6 +18,7 @@ Most scripts take 5-25 minutes on one core; independent settings can run as para
 | `exp5_screening.py` | E5: top-k screening (known generator) and an optimizer push, d = 50 |
 | `exp6_ratio_tuning.py` | E6: better density-ratio estimators for weighted CP |
 | `exp7_deep_features.py` | E7: features from networks trained for the mean |
+| `exp8_check_and_fix.py` | E8: source-only warning check and a learned score feature |
 | `out_*.txt` | Raw outputs |
 
 ## Implementation choices where the paper is unspecific
@@ -121,6 +122,23 @@ coverage is whether the features can express the error-relevant quantity |x1| (o
 |x1| probe matches the ordering of CV coverage), not whether they contain x1. Strong weight decay
 removes |x1| and LR-QR falls back towards split CP; CV lambda does not notice.
 Possible practical check (untested): probe whether the features predict the calibration scores.
+
+**E8, warning check and feature fix** (`exp8_check_and_fix.py`, 5 reps, `out_E8.txt`).
+Check = skill of quantile regression on the features at predicting calibration scores (2-fold,
+pinball loss relative to a constant quantile). Fix = append g(x), a model of the score fitted on an
+extra labeled source split of 2000 points (gradient boosting or MLP).
+| case | skill base | CV cov base | skill +g | CV cov +g_gbm / +g_mlp |
+|---|---|---|---|---|
+| E4 blind (d=10) | -0.02 | 0.733 | 0.22 | 0.842 / 0.873 |
+| E4 affine (d=10) | -0.02 | 0.748 | 0.23 | 0.847 / 0.893 |
+| E7 deep net, weight decay | 0.02 | 0.797 | 0.23-0.24 | 0.855 / 0.871 |
+| E5 optimizer, affine (d=50) | -0.09 | 0.726 | -0.08 | 0.724 / 0.737 |
+| E5 optimizer, rich (control) | 0.30 | 0.904 | 0.30 | 0.907 / 0.908 |
+The check separates every failing case (skill ~ 0) from the working control (0.30). The fix
+recovers most of the gap in d = 10 but stays below 0.90: g is fitted on source data and must
+extrapolate into the shifted region (the MLP, which extrapolates, beats boosting, which is flat).
+In d = 50 the score model cannot learn |w.x| from 2000 points, the fix does nothing, and the check
+says so (skill stays ~ 0). So the check also tells you whether the fix worked.
 
 ## Summary of what the experiments suggest (not yet claims)
 1. In the authors' own toy, the shift does not affect the errors (split CP is exactly valid), and
