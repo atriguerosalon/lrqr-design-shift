@@ -19,6 +19,7 @@ Most scripts take 5-25 minutes on one core; independent settings can run as para
 | `exp6_ratio_tuning.py` | E6: better density-ratio estimators for weighted CP |
 | `exp7_deep_features.py` | E7: features from networks trained for the mean |
 | `exp8_check_and_fix.py` | E8: source-only warning check and a learned score feature |
+| `exp9_airfoil.py` | E9: real data, NASA airfoil self-noise (`../data/uci_airfoil/`) |
 | `out_*.txt` | Raw outputs |
 
 ## Implementation choices where the paper is unspecific
@@ -139,6 +140,19 @@ recovers most of the gap in d = 10 but stays below 0.90: g is fitted on source d
 extrapolate into the shifted region (the MLP, which extrapolates, beats boosting, which is flat).
 In d = 50 the score model cannot learn |w.x| from 2000 points, the fix does nothing, and the check
 says so (skill stays ~ 0). So the check also tells you whether the fix worked.
+
+**E9, real data: NASA airfoil self-noise** (`exp9_airfoil.py`, 1503 points, 5 inputs, random forest
+surrogate, 50 reps, `out_E9.txt`; calibration 376 points; true-weight ESS 30-70):
+| tilt | split | WCP true r | WCP logistic | LR-QR lam=0 | LR-QR CV | LR-QR CV +g |
+|---|---|---|---|---|---|---|
+| T1 Tibshirani-style | 0.830 (7.8) | 0.915 (9.8) | 0.917 (10.0) | 0.915 (10.2) | 0.934 (11.1) | 0.920 (10.0) |
+| T2 high angle of attack | 0.736 (7.8) | 0.915 (13.1) | 0.912 (13.2) | 0.872 (11.0) | 0.929 (15.2) | 0.904 (13.0) |
+| T3 quiet predicted | 0.931 (7.8) | 0.908 (7.1) | 0.925 (7.4) | 0.902 (7.3) | 0.934 (8.1) | 0.935 (8.1) |
+(width in dB in brackets; coverage sd across reps 0.04-0.09). In 5 dimensions every weighted
+method is valid; weighted CP with a logistic ratio is as good or narrower; LR-QR is valid but
+wider, and the g feature brings its width close to weighted CP. Consistent with the synthetic
+low-dimensional results. T3 shifts towards low-error regions: weighted methods narrow the
+interval, LR-QR with CV lambda does not.
 
 ## Summary of what the experiments suggest (not yet claims)
 1. In the authors' own toy, the shift does not affect the errors (split CP is exactly valid), and
