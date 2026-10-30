@@ -1,0 +1,46 @@
+  rep 0 done
+  rep 1 done
+  rep 2 done
+  rep 3 done
+  rep 4 done
+  rep 5 done
+  rep 6 done
+  rep 7 done
+  rep 8 done
+  rep 9 done
+
+== E5 scenario S (S = top-10% screening, O = optimizer push), d=50
+   split        cov 0.670 +- 0.012   width    1.851
+   wcp_true_r   cov 0.888 +- 0.029   width    3.122
+   _ess_true    median 189
+   wcp_logit_r  cov 0.925 +- 0.077   width    4.243
+   qr_lam0      cov 0.883 +- 0.024   width    3.027
+   lrqr_0.001   cov 0.896 +- 0.021   width    3.128
+   lrqr_0.01    cov 0.963 +- 0.008   width    4.104
+   lrqr_0.1     cov 0.997 +- 0.002   width    6.017
+   lrqr_1       cov 0.795 +- 0.041   width    2.485
+   lrqr_cv      cov 0.896 +- 0.031   width    3.084
+   _lam_cv      median 0.001
+  rep 0 done
+  rep 1 done
+  rep 2 done
+  rep 3 done
+  rep 4 done
+  rep 5 done
+  rep 6 done
+  rep 7 done
+  rep 8 done
+  rep 9 done
+
+== E5 scenario O (S = top-10% screening, O = optimizer push), d=50
+   split        cov 0.712 +- 0.011   width    1.851
+   wcp_true_r   cov 0.919 +- 0.051   width    3.418
+   _ess_true    median 216
+   wcp_logit_r  cov 0.811 +- 0.022   width    2.544
+   qr_lam0      cov 0.882 +- 0.016   width    2.923
+   lrqr_0.001   cov 0.888 +- 0.015   width    2.982
+   lrqr_0.01    cov 0.926 +- 0.008   width    3.615
+   lrqr_0.1     cov 0.909 +- 0.010   width    5.588
+   lrqr_1       cov 0.679 +- 0.029   width    2.724
+   lrqr_cv      cov 0.892 +- 0.020   width    3.058
+   _lam_cv      median 0.001

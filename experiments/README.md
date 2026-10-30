@@ -15,6 +15,8 @@ Most scripts take 5-25 minutes on one core; independent settings can run as para
 | `exp1_authors_toy.py` | E1: replication of the authors' rebuttal simulation (reply to reviewer KYG7) |
 | `exp2_stress.py E2 / E2rich / E3 / E4` | E2-E4: shift strength, dimension, feature choice |
 | `check_beta_grid.py` | Is the large-lambda failure an optimisation artefact? Effect of the beta range |
+| `exp5_screening.py` | E5: top-k screening (known generator) and an optimizer push, d = 50 |
+| `exp6_ratio_tuning.py` | E6: better density-ratio estimators for weighted CP |
 | `out_*.txt` | Raw outputs |
 
 ## Implementation choices where the paper is unspecific
@@ -84,6 +86,28 @@ conclusions hold. delta = 1/2/3: split 0.820/0.644/0.478; weighted CP (logistic)
 LR-QR with CV lambda 0.907/0.929/0.740. Under strong shift coverage swings 0.60-0.99 across a
 factor of 10 in lambda (delta = 3: lambda 1e-3 -> 0.992 but trivial sets, 1e-2 -> 0.710,
 1e-1 -> 0.614), and CV does not reliably find a good lambda.
+
+**E5, application-shaped shifts** (`exp5_screening.py`, d = 50, shift spread over all coordinates
+along w = 1/sqrt(d), errors grow with |w.x|, features [1, x, |f(x)|], 10 reps, `out_E5.txt`):
+- S, top-10% screening from the calibration generator (ratio known: 10 * 1{selected}):
+  split 0.670; selective CP = weighted CP with the known ratio 0.888 +- 0.029 (width 3.12);
+  weighted CP with logistic ratio 0.925 +- 0.077 (width 4.24, unstable: a sigmoid cannot fit an
+  indicator); QR lambda = 0 0.883; LR-QR CV 0.896 (width 3.08). LR-QR matches selective CP but
+  offers nothing over it, and selective CP needs no unlabeled target set or tuning.
+- O, optimizer push x + s*w, s ~ U(0, 3) (ratio unknown in practice): split 0.712; weighted CP
+  true r 0.919 +- 0.051 (width 3.42); weighted CP logistic 0.811 (fails: log-ratio is not linear
+  in x); QR lambda = 0 0.882; LR-QR CV 0.892 (width 3.06); lambda = 0.01 0.926; lambda = 1 0.679.
+  First setting where LR-QR clearly beats the estimated-ratio baseline. But most of the gain comes
+  from the |f(x)| feature (lambda = 0 is already 0.882); the regulariser adds ~0.01 at CV lambda.
+  Logistic C = 1 not tuned; a better ratio classifier might close the gap (to check).
+
+**E6, better ratio estimators for weighted CP** (`exp6_ratio_tuning.py`, same data as E5 scenario O,
+10 reps, `out_E6.txt`; LR-QR CV was 0.892): logistic C = 1 0.811 (reproduces E5); logistic with CV
+over C 0.808; logistic on [x, x^2] with CV 0.794; gradient boosting 0.777; MLP classifier 0.850 +- 0.055;
+logistic on the true shift direction only (oracle, not available in practice) 0.907.
+The learned ratios correlate well with the true one (0.78-0.94 on log scale) but are too flat:
+their ESS is 460-820 against ~216 for the true ratio, so they under-weight the most shifted
+calibration points and under-cover. LR-QR's win in scenario O holds against tuned estimators.
 
 ## Summary of what the experiments suggest (not yet claims)
 1. In the authors' own toy, the shift does not affect the errors (split CP is exactly valid), and

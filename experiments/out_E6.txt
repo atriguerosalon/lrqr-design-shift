@@ -1,0 +1,39 @@
+[WinError 2] The system cannot find the file specified
+  File "C:\Users\aleja\AppData\Local\Programs\Python\Python38\lib\site-packages\joblib\externals\loky\backend\context.py", line 257, in _count_physical_cores
+    cpu_info = subprocess.run(
+  File "C:\Users\aleja\AppData\Local\Programs\Python\Python38\lib\subprocess.py", line 493, in run
+    with Popen(*popenargs, **kwargs) as process:
+  File "C:\Users\aleja\AppData\Local\Programs\Python\Python38\lib\subprocess.py", line 858, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\aleja\AppData\Local\Programs\Python\Python38\lib\subprocess.py", line 1311, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+  rep 0 done
+  rep 1 done
+  rep 2 done
+  rep 3 done
+  rep 4 done
+  rep 5 done
+  rep 6 done
+  rep 7 done
+  rep 8 done
+  rep 9 done
+
+== E6 ratio estimators for weighted CP, scenario O, d=50 (LR-QR CV: 0.892)
+   logit_C1     cov 0.811 +- 0.022   width    2.544
+   _corr_logit_C1 median 0.939
+   _ess_logit_C1 median 694
+   logit_cv     cov 0.808 +- 0.022   width    2.521
+   _corr_logit_cv median 0.939
+   _ess_logit_cv median 719
+   logit_quad_cv cov 0.794 +- 0.028   width    2.411
+   _corr_logit_quad_cv median 0.921
+   _ess_logit_quad_cv median 817
+   boosting     cov 0.777 +- 0.027   width    2.271
+   _corr_boosting median 0.78
+   _ess_boosting median 737
+   mlp          cov 0.850 +- 0.055   width    2.636
+   _corr_mlp    median 0.89
+   _ess_mlp     median 459
+   oracle_dir_logit cov 0.907 +- 0.050   width    3.303
+   _corr_oracle_dir_logit median 0.997
+   _ess_oracle_dir_logit median 260
