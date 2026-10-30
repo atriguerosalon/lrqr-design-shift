@@ -1,0 +1,22 @@
+__pycache__/
+*.pyc
+# third-party papers and their text dumps (copyrighted, keep local)
+refs/
+joshi2025_lrqr.pdf
+joshi2025_lrqr.txt
+# clone of the authors' (empty) repository
+lrqr_code/
+# private drafts
+email_draft_authors.txt
+proposal_draft_for_meeting.tex
+proposal_with_comments.tex
+# LaTeX build files
+*.aux
+*.log
+*.out
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.pdf
+!GML26_Trigueros_Scharitzer_Conformal_Proposal.pdf
+!proposal/logo.pdf
