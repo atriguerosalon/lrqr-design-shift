@@ -1,0 +1,44 @@
+
+== E4 features=affine, d=10, delta=1.5
+   split        cov 0.736 +- 0.018   width    1.853
+   wcp_true_r   cov 0.890 +- 0.027   width    3.175
+   wcp_logit_r  cov 0.888 +- 0.025   width    3.170
+   _ess_true    median 282
+   qr_lam0      cov 0.732 +- 0.017   width    1.901
+   lrqr_0.001   cov 0.738 +- 0.016   width    1.914
+   lrqr_0.01    cov 0.780 +- 0.012   width    2.116
+   lrqr_0.1     cov 0.846 +- 0.011   width    2.453
+   lrqr_1       cov 0.703 +- 0.012   width    1.774
+
+== E4 features=blind, d=10, delta=1.5
+   split        cov 0.736 +- 0.018   width    1.853
+   wcp_true_r   cov 0.890 +- 0.027   width    3.175
+   wcp_logit_r  cov 0.888 +- 0.025   width    3.170
+   _ess_true    median 282
+   qr_lam0      cov 0.734 +- 0.015   width    1.866
+   lrqr_0.001   cov 0.734 +- 0.015   width    1.868
+   lrqr_0.01    cov 0.733 +- 0.016   width    1.868
+   lrqr_0.1     cov 0.736 +- 0.018   width    1.886
+   lrqr_1       cov 0.732 +- 0.018   width    1.872
+
+== E4 features=learned, d=10, delta=1.5
+   split        cov 0.736 +- 0.018   width    1.853
+   wcp_true_r   cov 0.890 +- 0.027   width    3.175
+   wcp_logit_r  cov 0.888 +- 0.025   width    3.170
+   _ess_true    median 282
+   qr_lam0      cov 0.801 +- 0.017   width    2.305
+   lrqr_0.001   cov 0.805 +- 0.016   width    2.325
+   lrqr_0.01    cov 0.848 +- 0.014   width    2.665
+   lrqr_0.1     cov 0.889 +- 0.022   width    3.075
+   lrqr_1       cov 0.707 +- 0.032   width    2.059
+
+== E4 features=learned_noise, d=10, delta=1.5
+   split        cov 0.736 +- 0.018   width    1.853
+   wcp_true_r   cov 0.890 +- 0.027   width    3.175
+   wcp_logit_r  cov 0.888 +- 0.025   width    3.170
+   _ess_true    median 282
+   qr_lam0      cov 0.893 +- 0.013   width    2.903
+   lrqr_0.001   cov 0.898 +- 0.011   width    2.958
+   lrqr_0.01    cov 0.934 +- 0.007   width    3.490
+   lrqr_0.1     cov 0.943 +- 0.013   width    5.093
+   lrqr_1       cov 0.770 +- 0.038   width    3.003

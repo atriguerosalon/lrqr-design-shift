@@ -13,6 +13,9 @@ Most scripts take 5-25 minutes on one core; independent settings can run as para
 |---|---|
 | `lrqr.py` | LR-QR (beta eliminated in closed form, smoothed pinball, L-BFGS), lambda CV as described in Sec. 5.1, split CP, weighted CP, logistic density-ratio estimate, effective sample size |
 | `exp1_authors_toy.py` | E1: replication of the authors' rebuttal simulation (reply to reviewer KYG7) |
+| `exp2_stress.py E2 / E2rich / E3 / E4` | E2-E4: shift strength, dimension, feature choice |
+| `check_beta_grid.py` | Is the large-lambda failure an optimisation artefact? Effect of the beta range |
+| `out_*.txt` | Raw outputs |
 
 ## Implementation choices where the paper is unspecific
 
@@ -40,3 +43,58 @@ split CP 0.900 (already valid: the shift does not change the error distribution)
 (true or estimated r) gives infinite intervals; LR-QR 0.893 / 0.893 / 0.909 / 0.993 / 0.997 for
 lambda = 1e-6 ... 1e-2 (authors report 0.864 / 0.860 / 0.867 / 0.943 / 1.000). Same pattern, not
 the exact numbers.
+
+**E2, shift strength** (d = 10, error grows with |x1|, shift along x1):
+- Affine features: LR-QR improves on split CP only partially at the best lambda; CV-chosen lambda
+  ~1e-3 stays near split CP (e.g. delta = 1.5: split 0.736, LR-QR CV 0.746, best lambda 0.846,
+  weighted CP with logistic ratio 0.888).
+- Rich features (x, x^2, |x|): plain quantile regression with lambda = 0 already reaches ~0.89-0.90
+  at all shift strengths; CV picks lambda ~ 0. Larger lambda breaks coverage under strong shift
+  (delta = 3: lambda = 0.1 gives 0.415). Possibly prevented by the paper's beta/B bounds; to check.
+
+**E4, features** (d = 10, delta = 1.5): features blind to x1 -> LR-QR equals split CP (0.73) for every
+lambda, silently. Mean-prediction MLP features: lambda = 0.1 lifts coverage 0.80 -> 0.89.
+Error-prediction MLP features: lambda = 0 already 0.89.
+
+**E3, dimension** (delta = 1.5, rich features = 1 + 3d columns, 5 reps; n1 = 2000):
+split 0.73 throughout; weighted CP (logistic) 0.90-0.91 at every d; QR lambda = 0:
+0.887 / 0.891 / 0.889 / 0.846 / 0.793 for d = 5 / 20 / 50 / 100 / 200; lambda = 0.01:
+0.945 / 0.941 / 0.939 / 0.924 / 0.897; lambda = 0.1: 0.947 / 0.935 / 0.885 / 0.838 / 0.665;
+lambda = 1: 0.754 ... 0.488. As features approach n1, QR over-fits the calibration scores and
+under-covers (paper's d << n assumption); the working lambda window narrows. Caveat: the shift is
+along a single coordinate, so the logistic ratio estimate has an easy job; not yet a fair
+high-dimensional test of weighted CP. ESS of true weights ~270 / 2000 at every d.
+
+**beta range check** (`check_beta_grid.py`, delta = 3, rich features, 5 reps): the large-lambda
+failure is not an optimisation artefact (beta grid with convex inner problem gives the same:
+lambda = 0.1 -> 0.435 vs 0.413). But restricting beta <= 1 flips it to over-coverage (0.98).
+Coverage under strong shift depends heavily on the beta interval, which the paper does not specify
+in practice. Consistent with Theorem 4.3: with E1[r^2] ~ 8100 and r far from the feature span, the
+misspecification term makes the bound vacuous.
+
+**From the paper's appendix** (arXiv 2502.13030, Appendix M): Lemma M.4 sets
+beta_upper = E1[r^2]^{1/2} / (B_lower * lambda_min(Sigma)^{1/2}), so the theory requires the beta
+interval to grow with the shift. The unbounded-beta behaviour (undercoverage under strong shift) is
+therefore the theory-compliant one; clipping beta <= 1 is an off-theory heuristic. The proof also
+reparametrises LR-QR as min E1[pinball] - mu * E1[r h]^2 / E1[h^2], which is exactly our
+beta-eliminated objective (E1[r h] = E2[h]), so our implementation matches the paper's own math.
+
+**Bounded scores** (`exp2_stress.py E2rich_bounded`, S' = S/(1+S), as the theory assumes S in [0,1]):
+conclusions hold. delta = 1/2/3: split 0.820/0.644/0.478; weighted CP (logistic) 0.895/0.905/0.937;
+LR-QR with CV lambda 0.907/0.929/0.740. Under strong shift coverage swings 0.60-0.99 across a
+factor of 10 in lambda (delta = 3: lambda 1e-3 -> 0.992 but trivial sets, 1e-2 -> 0.710,
+1e-1 -> 0.614), and CV does not reliably find a good lambda.
+
+## Summary of what the experiments suggest (not yet claims)
+1. In the authors' own toy, the shift does not affect the errors (split CP is exactly valid), and
+   r is far outside the affine class; it cannot show a benefit from correcting the shift.
+2. With features that model the error structure, plain quantile regression (lambda = 0, Gibbs-style)
+   already handles the shift; LR-QR's regulariser matters in the middle regime where features see
+   the shift but do not model the error.
+3. Features blind to the shift: LR-QR silently equals split CP.
+4. Strong shift (large E1[r^2]): coverage is very sensitive to lambda and to the beta range; the
+   paper's lambda-CV does not reliably fix it; consistent with Theorem 4.3 becoming vacuous.
+5. In low dimension, weighted CP with a logistic ratio estimate is a strong baseline throughout.
+
+## Open checks
+- Ask the authors for code (email above), or Francesco whether that is appropriate.
