@@ -1,0 +1,196 @@
+\documentclass[10pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[export]{adjustbox}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{datetime}
+\usepackage{natbib}
+\usepackage{array}
+\usepackage{amsmath,amssymb}
+\usepackage[includeheadfoot,
+            left=0.85in,
+            right=0.85in,
+            top=-0.55in,
+            bottom=0.05in,
+            headheight=110pt]{geometry}
+\usepackage{titlesec}
+
+\newdateformat{monthyeardate}{%
+  \monthname[\THEMONTH] \THEYEAR}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\refname}{}
+\fancyhead[L]{
+    \begin{minipage}[t]{0.55\textwidth}
+    \vspace{0pt}
+    \includegraphics[height=28pt]{logo.pdf}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.4\textwidth}
+    \raggedleft
+    \vspace{0em}
+    Alejandro Trigueros Alonso \\
+    Felicia Scharitzer
+    \end{minipage}
+    \vspace{-0.75\baselineskip}
+}
+
+\setlength{\footskip}{20pt}
+\fancyfoot[R]{\monthyeardate\today}
+
+\renewcommand{\thesection}{Part \arabic{section}}
+\renewcommand{\thesubsection}{\arabic{subsection} .}
+
+\begin{document}
+
+\setlength{\headheight}{8\baselineskip}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{\baselineskip}
+
+\titlespacing*{\section}{0pt}{0.0ex}{0.0ex}
+\titlespacing*{\subsection}{0pt}{0ex}{-1ex}
+
+\section*{Conformal Prediction under High-Dimensional Covariate Shift}
+\vspace{-1em}
+{\itshape Guarantees in Machine Learning, Project Proposal. Supervisor: Francesco Taroni}
+
+\subsection*{Main paper and field}
+
+\vspace{-0.25em}
+
+This project studies conformal prediction under covariate shift: how to keep prediction
+sets reliable when the model is deployed on inputs that differ from its calibration data.
+The main paper is \textit{Conformal Inference under High-Dimensional Covariate Shifts via
+Likelihood-Ratio Regularization} by Joshi et al.\ 2025 \cite{joshi2026conformal}.
+
+\subsection*{Motivation}
+
+\vspace{-0.25em}
+
+Conformal prediction turns any trained model's output into prediction sets that contain
+the true value with probability at least $1{-}\alpha$. Split conformal prediction, the
+most common variant, computes the model's errors on a held-out calibration set and takes
+their $(1{-}\alpha)$-quantile as the set width. The guarantee holds in finite samples and
+without assumptions on the model or the data distribution, requiring only that calibration
+and test points are exchangeable.
+
+\vspace{-0.25em}
+
+This assumption fails under covariate shift: the input distribution changes from
+$\mathbb{P}_1$ (calibration) to $\mathbb{P}_2$ (test) while the conditional $P(Y \mid X)$
+remains the same. The model can be far less accurate on the test inputs, and coverage
+drops below the nominal level without warning. We are interested in the setting where a
+neural network surrogate replaces an expensive simulation inside a design optimizer. The
+conditional relationship does not change, but the optimizer explores inputs that differ
+from the training data, often in regions where the surrogate is least reliable, producing
+exactly the covariate shift setting with labeled calibration data from $\mathbb{P}_1$ and
+only unlabeled inputs from $\mathbb{P}_2$.
+
+\vspace{-0.25em}
+
+Three families of methods address this setting. The first reweights calibration errors by
+the likelihood ratio $r = d\mathbb{P}_2/d\mathbb{P}_1$, restoring exact coverage when $r$
+is known \cite{tibshirani2019conformal}. When $r$ must be estimated, coverage degrades
+with the estimation error \cite{lei2021conformal, yang2024doubly}. An alternative fits a
+quantile regression over a function class, giving coverage under every shift in that class
+simultaneously without requiring target data \cite{gibbs2025conformal}, at the cost of
+over-coverage of order $\mathcal{O}(d/(n{+}1))$. A third family, distributionally robust
+methods, guarantees coverage under the worst-case shift within a neighborhood of the
+calibration distribution \cite{aolaritei2026conformal}. When inputs are high-dimensional
+(images, embeddings, physical geometries) and labeled data is expensive, all three face
+difficulties: density ratio estimation becomes unreliable, class-wide coverage is
+conservative, and robust neighborhoods require labeled test data to calibrate.
+
+\subsection*{Paper's methodology}
+
+\vspace{-0.25em}
+
+Joshi et al.\ address the case where inputs are high-dimensional and estimating $r$
+directly is impractical. Their method (LR-QR) fits an input-dependent threshold $h(x)$
+through a set of features $\Phi(x)$ (for example the embedding of a pretrained network)
+by minimizing
+\[
+\min_{h\in\mathcal H,\,\beta\in\mathbb R}\ \mathbb E_1[\ell_\alpha(h(X),S)]
++ \lambda\big(\beta^2\,\mathbb E_1[h(X)^2]-2\beta\,\mathbb E_2[h(X)]\big),
+\]
+where $S$ is the conformity score of a labeled calibration point and $\ell_\alpha$ is the
+pinball loss, whose minimizer is the $(1{-}\alpha)$-quantile. The first term is a quantile
+regression on calibration data, as in \cite{gibbs2025conformal}, but instead of
+guaranteeing coverage under all shifts in the function class, the second term uses
+unlabeled inputs from $\mathbb{P}_2$ to focus on the specific shift that occurs. Since
+$\mathbb E_2[h]=\mathbb E_1[r\,h]$, this term equals the squared distance between
+$\beta h$ and $r$ up to a constant, steering the threshold towards the actual shift and
+avoiding the over-coverage penalty of the class-wide guarantee. At the population level,
+coverage at $1{-}\alpha$ holds assuming $r$ lies in the span of the features, with
+additional estimation error and misspecification terms in finite samples. The paper
+validates the method on tabular data, an LLM question-answering task, and cell images
+with synthetic shifts, but does not consider physical simulation data.
+
+\vspace{-0.25em}
+
+The goal of this project is to clarify the relationship between LR-QR and the results it
+builds on, and to assess whether the method's assumptions and practical choices (feature
+selection, regularization strength, shift magnitude) transfer to application settings like
+surrogate-based design optimization, where the shift is induced by an optimizer and inputs
+are high-dimensional.
+
+\subsection*{Related Work}
+
+\vspace{-0.25em}
+
+\textit{Conformal prediction under covariate shift} \cite{tibshirani2019conformal}.
+Introduces the reweighting approach and proves exact coverage when the likelihood ratio is
+known. This is the starting point for the problem LR-QR addresses and one of its
+baselines.
+
+\vspace{-0.25em}
+
+\textit{Conformal prediction beyond exchangeability} \cite{barber2023conformal}. Extends
+conformal prediction to non-exchangeable data, bounding the coverage loss by how far the
+data depart from exchangeability. It provides the general framework for analysing methods
+under shift.
+
+\vspace{-0.25em}
+
+\textit{Conformal prediction with conditional guarantees} \cite{gibbs2025conformal}.
+Shows that quantile regression over a $d$-dimensional function class guarantees coverage
+under every shift in that class simultaneously, without target data, at the price of sets
+that over-cover by up to order $d/(n+1)$. LR-QR builds on this construction and adds
+unlabeled target inputs to focus on the shift that actually occurs.
+
+\vspace{-0.25em}
+
+\textit{A least-squares approach to direct importance estimation} \cite{kanamori2009least}.
+Estimates the likelihood ratio by minimizing $\tfrac12\mathbb E_1[g^2]-\mathbb E_2[g]$,
+which up to a factor of two is the LR-QR regularizer with $g=\beta h$. The authors of
+LR-QR show that their fitted $\beta h$ stays far from $r$; we want to understand what the
+regularizer actually does and how much of the method follows from these existing pieces.
+
+\subsection*{Next Steps}
+
+\vspace{-0.25em}
+
+\begin{enumerate}
+    \item Position LR-QR in the literature: what problem it addresses that earlier methods
+          left open, and how later work relates to it.
+    \item Work through the paper's proofs, assumptions, and experiments, with LLM- and
+          Lean-assisted checking.
+    \item Identify which assumptions and practical choices might not transfer to
+          surrogate-based design: whether the features capture the shift, how the
+          regularization strength is chosen, and how optimization-induced shifts are
+          handled.
+    \item Select a concrete question from the above and develop it, combining theoretical
+          analysis with small-scale experiments.
+\end{enumerate}
+
+\vspace{-5ex}
+
+\bibliographystyle{unsrt}
+
+\bibliography{references}
+
+\end{document}
