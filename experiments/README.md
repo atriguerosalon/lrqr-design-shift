@@ -20,6 +20,7 @@ Most scripts take 5-25 minutes on one core; independent settings can run as para
 | `exp7_deep_features.py` | E7: features from networks trained for the mean |
 | `exp8_check_and_fix.py` | E8: source-only warning check and a learned score feature |
 | `exp9_airfoil.py` | E9: real data, NASA airfoil self-noise (`../data/uci_airfoil/`) |
+| `exp10_lambda_rule.py` | E10: rules for choosing lambda |
 | `out_*.txt` | Raw outputs |
 
 ## Implementation choices where the paper is unspecific
@@ -153,6 +154,20 @@ method is valid; weighted CP with a logistic ratio is as good or narrower; LR-QR
 wider, and the g feature brings its width close to weighted CP. Consistent with the synthetic
 low-dimensional results. T3 shifts towards low-error regions: weighted methods narrow the
 interval, LR-QR with CV lambda does not.
+
+**E10, choosing lambda** (`exp10_lambda_rule.py`, one process per setting, `out_E10_*.txt`).
+Rules: lambda = 0; the paper's CV; "wcov" (3-fold, pick the narrowest lambda whose
+logistic-weighted held-out coverage is >= 0.9); oracle (narrowest lambda with test coverage >= 0.9).
+| setting | lambda=0 | CV | wcov | oracle |
+|---|---|---|---|---|
+| E2 rich, delta=1 | 0.893 | 0.905 | 0.902 | 0.910 |
+| E2 rich, delta=2 | 0.898 | 0.914 | 0.907 | 0.916 |
+| E2 rich, delta=3 | 0.901 | 0.923 | 0.924 | 0.951 |
+| E5 optimizer, d=50 | 0.882 | 0.892 | 0.906 | 0.917 |
+| airfoil T2 (30 reps) | 0.868 | 0.916 | 0.921 | 0.944 |
+With features that can express the error structure, every rule is within ~0.03 of the oracle, and
+the wcov rule only helps in the d = 50 case (0.892 -> 0.906, wider). Choosing lambda is not the
+bottleneck; the features are (E4, E7, E8: with bad features no lambda recovers coverage).
 
 ## Summary of what the experiments suggest (not yet claims)
 1. In the authors' own toy, the shift does not affect the errors (split CP is exactly valid), and

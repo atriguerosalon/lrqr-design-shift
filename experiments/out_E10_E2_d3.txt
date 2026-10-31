@@ -1,0 +1,5 @@
+== E10 lambda rules, E2_d3, 10 reps
+   lam0    cov 0.901 +- 0.038   width   5.558   median lambda 0
+   cv      cov 0.923 +- 0.045   width   5.780   median lambda 0
+   wcov    cov 0.924 +- 0.054   width   6.070   median lambda 0
+   oracle  cov 0.951 +- 0.031   width   6.497   median lambda 0

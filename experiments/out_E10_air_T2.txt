@@ -1,0 +1,5 @@
+== E10 lambda rules, air_T2, 30 reps
+   lam0    cov 0.868 +- 0.106   width  10.710   median lambda 0
+   cv      cov 0.916 +- 0.102   width  13.496   median lambda 0.01
+   wcov    cov 0.921 +- 0.080   width  15.007   median lambda 0.01
+   oracle  cov 0.944 +- 0.028   width  12.655   median lambda 0.002
