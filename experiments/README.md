@@ -21,6 +21,7 @@ Most scripts take 5-25 minutes on one core; independent settings can run as para
 | `exp8_check_and_fix.py` | E8: source-only warning check and a learned score feature |
 | `exp9_airfoil.py` | E9: real data, NASA airfoil self-noise (`../data/uci_airfoil/`) |
 | `exp10_lambda_rule.py` | E10: rules for choosing lambda |
+| `exp11_design_loop.py` | E11: reusing verified designs for calibration in a design loop |
 | `out_*.txt` | Raw outputs |
 
 ## Implementation choices where the paper is unspecific
@@ -168,6 +169,18 @@ logistic-weighted held-out coverage is >= 0.9); oracle (narrowest lambda with te
 With features that can express the error structure, every rule is within ~0.03 of the oracle, and
 the wcov rule only helps in the d = 50 case (0.892 -> 0.906, wider). Choosing lambda is not the
 bottleneck; the features are (E4, E7, E8: with bad features no lambda recovers coverage).
+
+**E11, design loop** (`exp11_design_loop.py`, d = 10, random forest surrogate, 3 rounds pushing
+candidates further along w, 300 verified points per earlier round, 10 reps, `out_E11.txt`).
+Coverage for round-3 candidates (split / LR-QR lambda=0 / LR-QR CV):
+- A original calibration: 0.544 / 0.799 / 0.835
+- B pooled with verified rounds 1-2, surrogate not retrained: 0.614 / 0.849 / 0.859
+- C pooled, surrogate retrained on the verified points too: 0.557 / 0.672 / 0.736
+- D original calibration, retrained surrogate: 0.571 / 0.795 / 0.844
+Reusing verified designs for calibration helps (B > A: the pooled source is closer to the target),
+but only if the surrogate was not trained on them. After retraining, their scores are ~0.59x their
+honest size and LR-QR loses 0.12 coverage (C). Retraining while keeping calibration held out is fine
+(D ~ A). Nothing reaches 0.90 here: round 3 is a strong shift and the forest cannot extrapolate.
 
 ## Summary of what the experiments suggest (not yet claims)
 1. In the authors' own toy, the shift does not affect the errors (split CP is exactly valid), and

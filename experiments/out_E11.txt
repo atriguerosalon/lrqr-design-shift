@@ -1,0 +1,14 @@
+== E11 design loop, calibration for round-3 candidates
+   A_original_split cov 0.544 +- 0.011   width    2.348
+   A_original_lam0 cov 0.799 +- 0.040   width    4.437
+   A_original_cv cov 0.835 +- 0.054   width    4.893
+   B_pooled_split cov 0.614 +- 0.012   width    2.827
+   B_pooled_lam0 cov 0.849 +- 0.025   width    5.086
+   B_pooled_cv  cov 0.859 +- 0.022   width    5.124
+   C_pooled_retrained_split cov 0.557 +- 0.008   width    2.246
+   C_pooled_retrained_lam0 cov 0.672 +- 0.019   width    3.002
+   C_pooled_retrained_cv cov 0.736 +- 0.041   width    3.661
+   _C_verified_score_ratio median 0.586
+   D_original_retrained_split cov 0.571 +- 0.011   width    2.266
+   D_original_retrained_lam0 cov 0.795 +- 0.031   width    4.086
+   D_original_retrained_cv cov 0.844 +- 0.062   width    4.615
