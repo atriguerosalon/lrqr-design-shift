@@ -22,6 +22,7 @@ Most scripts take 5-25 minutes on one core; independent settings can run as para
 | `exp9_airfoil.py` | E9: real data, NASA airfoil self-noise (`../data/uci_airfoil/`) |
 | `exp10_lambda_rule.py` | E10: rules for choosing lambda |
 | `exp11_design_loop.py` | E11: reusing verified designs for calibration in a design loop |
+| `exp12_decomposition.py` | E12: exact decomposition of the coverage gap (`../notes_theory_double_robust.md`) |
 | `out_*.txt` | Raw outputs |
 
 ## Implementation choices where the paper is unspecific
@@ -182,16 +183,53 @@ but only if the surrogate was not trained on them. After retraining, their score
 honest size and LR-QR loses 0.12 coverage (C). Retraining while keeping calibration held out is fine
 (D ~ A). Nothing reaches 0.90 here: round 3 is a strong shift and the forest cannot extrapolate.
 
+**E12, exact coverage decomposition** (`exp12_decomposition.py`, theory in `../notes_theory_double_robust.md`,
+5 reps, 200k Monte Carlo points, `out_E12.txt`). With m(x) = P(S <= h(x) | x) - tau and r_H the
+projection of r onto span(phi) (which contains constants), for any h:
+P2 coverage - tau = E1[r_H m] (in-class) + E1[(r - r_H) m_perp] (misspecification), and at an LR-QR
+stationary point the in-class term is 2 lam beta E1[(r_H - beta h)^2] >= 0. Misspecification is a product:
+it vanishes if r is in H OR the conditional miscoverage is in H (double robustness).
+Checked: E1[r m] matches the direct P2 value and the test coverage to 0.001-0.01 in every case.
+
+| case (lam CV) | gap | in-class | misspec | paper penalty tau E1abs(r-r_H) | product bound | norm(r-r_H) | norm(m_perp) | D_hat |
+|---|---|---|---|---|---|---|---|---|
+| E4 blind      | -0.166 | 0.000 | -0.165 | 0.98 | 0.38 | 2.86 | 0.132 | 0.135 |
+| E4 blind + g  | -0.028 | 0.009 | -0.036 | 0.95 | 0.28 | 2.57 | 0.110 | 0.082 |
+| E4 affine     | -0.152 | 0.016 | -0.167 | 0.87 | 0.33 | 2.43 | 0.135 | 0.135 |
+| E4 affine + g | -0.008 | 0.033 | -0.041 | 0.74 | 0.22 | 2.10 | 0.105 | 0.079 |
+| E4 rich       | +0.002 | 0.003 | -0.001 | 0.65 | 0.06 | 1.74 | 0.034 | 0.061 |
+| E5O affine    | -0.180 | 0.009 | -0.189 | 1.04 | 1.47 | 10.3 | 0.142 | 0.060 |
+| E5O rich      | +0.001 | 0.022 | -0.022 | 1.08 | 0.62 | 10.2 | 0.064 | 0.063 |
+
+- Every failure is the misspecification term. In-class terms are small; at lam = 0 in d = 50 the in-class
+  term is -0.03 (finite-sample overfitting) and the CV lambda turns it positive. So lambda fixes the in-class
+  term, features fix the misspecification term; this is why lambda tuning did not help in E10.
+- E4 rich and E5O rich cover although r is far outside H (norm(r - r_H) = 1.7 and 10): the quantile side is right.
+- The paper's misspecification penalty is vacuous (0.65-1.08) in every case, including the ones that cover.
+  The product bound is tighter in d = 10 but is a Cauchy-Schwarz bound and loose with heavy-tailed r (d = 50).
+- D_hat (calibration-only estimate of norm(m_perp)) tracks the truth in d = 10 and separates failing (0.135)
+  from working (0.061) features, with a noise floor near 0.06. In d = 50 it misses the failure (0.060 vs
+  true 0.142), like the E8 score check: a tree classifier on 2000 points cannot find the |w.x| structure.
+
 ## Summary of what the experiments suggest (not yet claims)
-1. In the authors' own toy, the shift does not affect the errors (split CP is exactly valid), and
-   r is far outside the affine class; it cannot show a benefit from correcting the shift.
-2. With features that model the error structure, plain quantile regression (lambda = 0, Gibbs-style)
-   already handles the shift; LR-QR's regulariser matters in the middle regime where features see
-   the shift but do not model the error.
-3. Features blind to the shift: LR-QR silently equals split CP.
-4. Strong shift (large E1[r^2]): coverage is very sensitive to lambda and to the beta range; the
-   paper's lambda-CV does not reliably fix it; consistent with Theorem 4.3 becoming vacuous.
-5. In low dimension, weighted CP with a logistic ratio estimate is a strong baseline throughout.
+1. In the authors' own toy, the shift does not affect the errors (split CP is exactly valid); it cannot
+   show a benefit from correcting the shift (E1).
+2. Every coverage failure we saw is the misspecification term E1[(r - r_H) m_perp] (E12): LR-QR covers if
+   either the ratio or the score's quantile structure is in the feature span. Features that model the
+   error structure make even lambda = 0 valid (E2, E4); features blind to it make LR-QR silently equal
+   split CP (E4, E7).
+3. lambda only controls the in-class (finite-sample) term. With good features every lambda rule is within
+   ~0.03 of the oracle (E10); under strong shift coverage is sensitive to lambda and the beta range (E2).
+4. Top-k screening from a known generator does not need LR-QR (selective CP, E5). An unknown optimizer in
+   d = 50 is where LR-QR beats weighted CP with every learned ratio we tried (E5, E6).
+5. Source-only warning checks work in d = 10 but miss the failure in d = 50 (E8, E12). A learned score
+   feature fixes most of the failure in d = 10 (E8, E9).
+6. In low dimension (airfoil, 5 inputs) weighted CP with a logistic ratio is a strong baseline; LR-QR is
+   valid but wider (E9).
+7. In a design loop, calibration points must not be in the surrogate's training set (E11).
 
 ## Open checks
-- Ask the authors for code (email above), or Francesco whether that is appropriate.
+- Rerun E3 to regenerate its raw output (the numbers above come from the original run).
+- Whether the E12 decomposition is already known (Gibbs et al. 2025 do not state it as far as we found).
+- A source-only diagnostic that works in high dimension, e.g. a classifier given the surrogate prediction.
+- Ask the authors for code, or Francesco whether that is appropriate.

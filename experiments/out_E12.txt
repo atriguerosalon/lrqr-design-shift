@@ -1,0 +1,31 @@
+== E12 E4_blind, 5 reps (means). gap = E1[r m] = inclass + misspec; gap_p2 = E2[m] and test_gap = checks
+   feat  lam    test_gap    gap_p2       gap   inclass  lam_term   misspec paper_pen  prod_pen     r_res    m_perp     d_hat
+   base  lam0    -0.1668   -0.1664   -0.1657   -0.0005    0.0000   -0.1651    0.9818    0.3775    2.8571    0.1322    0.1346
+   base  cv      -0.1670   -0.1665   -0.1657   -0.0006    0.0000   -0.1652    0.9818    0.3775    2.8571    0.1322    0.1345
+   +g    lam0    -0.0296   -0.0293   -0.0294    0.0004    0.0000   -0.0298    0.9545    0.2530    2.5720    0.0985    0.0817
+   +g    cv      -0.0266   -0.0274   -0.0275    0.0086    0.0101   -0.0360    0.9545    0.2822    2.5720    0.1097    0.0819
+
+== E12 E4_affine, 5 reps (means). gap = E1[r m] = inclass + misspec; gap_p2 = E2[m] and test_gap = checks
+   feat  lam    test_gap    gap_p2       gap   inclass  lam_term   misspec paper_pen  prod_pen     r_res    m_perp     d_hat
+   base  lam0    -0.1631   -0.1633   -0.1626    0.0032    0.0000   -0.1658    0.8666    0.3233    2.4338    0.1329    0.1331
+   base  cv      -0.1519   -0.1521   -0.1515    0.0158    0.0115   -0.1673    0.8666    0.3278    2.4338    0.1348    0.1347
+   +g    lam0    -0.0275   -0.0270   -0.0271    0.0049    0.0000   -0.0320    0.7375    0.2059    2.0953    0.0984    0.0811
+   +g    cv      -0.0075   -0.0078   -0.0078    0.0332    0.0244   -0.0411    0.7375    0.2201    2.0953    0.1051    0.0792
+
+== E12 E4_rich, 5 reps (means). gap = E1[r m] = inclass + misspec; gap_p2 = E2[m] and test_gap = checks
+   feat  lam    test_gap    gap_p2       gap   inclass  lam_term   misspec paper_pen  prod_pen     r_res    m_perp     d_hat
+   base  lam0    -0.0034   -0.0043   -0.0044   -0.0063    0.0000    0.0019    0.6461    0.0608    1.7368    0.0353    0.0604
+   base  cv       0.0026    0.0022    0.0021    0.0034    0.0116   -0.0013    0.6461    0.0584    1.7368    0.0339    0.0613
+
+== E12 E5O_affine, 5 reps (means). gap = E1[r m] = inclass + misspec; gap_p2 = E2[m] and test_gap = checks
+   feat  lam    test_gap    gap_p2       gap   inclass  lam_term   misspec paper_pen  prod_pen     r_res    m_perp     d_hat
+   base  lam0    -0.2110   -0.2068   -0.2164   -0.0297    0.0000   -0.1866    1.0373    1.4679   10.3171    0.1406    0.0570
+   base  cv      -0.1739   -0.1706   -0.1802    0.0086    0.0392   -0.1888    1.0373    1.4744   10.3171    0.1419    0.0598
+   +g    lam0    -0.1980   -0.1946   -0.2029   -0.0359    0.0000   -0.1670    1.0548    1.4296   10.3029    0.1390    0.0574
+   +g    cv      -0.1633   -0.1591   -0.1676    0.0033    0.0360   -0.1709    1.0548    1.4376   10.3029    0.1422    0.0606
+
+== E12 E5O_rich, 5 reps (means). gap = E1[r m] = inclass + misspec; gap_p2 = E2[m] and test_gap = checks
+   feat  lam    test_gap    gap_p2       gap   inclass  lam_term   misspec paper_pen  prod_pen     r_res    m_perp     d_hat
+   base  lam0    -0.0264   -0.0255   -0.0264   -0.0293    0.0000    0.0028    1.0842    0.5644   10.1523    0.0536    0.0586
+   base  cv       0.0035    0.0015    0.0006    0.0221    0.0475   -0.0215    1.0842    0.6176   10.1523    0.0637    0.0630
+

@@ -75,7 +75,7 @@ def make_case(case, rep):
         phi = {"E5O_affine": lambda x: np.c_[np.ones(len(x)), x],
                "E5O_rich": lambda x: np.c_[np.ones(len(x)), x, np.abs(f.predict(x))]}[case]
     sc, se, sa = (np.abs(y - f.predict(x)) for x, y in [(xc, yc), (xe, ye), (xa, ya)])
-    return dict(xc=xc, xs=xs, xg=xg, xe=xe, xa=xa, sc=sc, se=se, sa=sa, phi=phi)
+    return dict(xc=xc, xs=xs, xg=xg, xe=xe, xa=xa, sc=sc, se=se, sa=sa, phi=phi, f=f)
 
 
 def run(case, reps=5):
